@@ -17,13 +17,20 @@
     <v-content>
       <v-item-group>
         <v-container grid-list-md>
-      <div class="text-center headline">You logged in as: <b>{{ this.user }}</b></div>
+          <div class="text-center headline">
+            
+            <b>{{ this.isLogged==true ? 'You logged in as: '+this.user : 'You should to be logged' }}</b>
+          </div>
 
           <v-layout wrap>
             <v-flex v-for="item in this.friends" :key="item.id" xs12 md2>
               <v-item>
                 <v-card class="flex">
-                  <v-card-title>{{ item.first_name }} <br />{{ item.last_name }}</v-card-title>
+                  <v-card-title>
+                    {{ item.first_name }}
+                    <br />
+                    {{ item.last_name }}
+                  </v-card-title>
                   <a :href="`http://vk.com/id${item.id}`">
                     <v-img :src="item.photo_100" aspect-ratio="2" class="grey lighten-2"></v-img>
                   </a>
@@ -53,8 +60,7 @@ export default {
     return {
       isLogged: null,
       user: "",
-      friends: [
-      ]
+      friends: []
     };
   },
 
@@ -64,7 +70,17 @@ export default {
         const user = response.session;
         this.isLogged = true;
         this.getFriends();
-        console.log(this.friends);
+        // console.log(this.friends);
+        VK.Api.call(
+          "users.get",
+          {
+            v: "5.101",
+            fields: ""
+          },
+          (response) => {
+            this.user = `${response.response[0].first_name}  ${response.response[0].last_name}`;
+          }
+        );
       } else {
         console.log("not authorized");
       }
@@ -92,7 +108,6 @@ export default {
       }, VK.access.FRIENDS);
     },
     getFriends() {
-      console.log("Get friends");
       VK.Api.call("friends.get", { v: "5.101", fields: "photo_100" }, data => {
         const count = data.response.count;
         const friendsList = data.response.items;
@@ -102,10 +117,9 @@ export default {
           this.friends = friendsList;
         } else {
           for (let i = 0; i < 6; i++) {
-            this.friends.push(
-              friendsList[Math.floor(Math.random() * (friendsList.length - 0))]
-            );
-            friendsList.splice(Math.floor(Math.random() * (friendsList.length - 0)), 1);
+            const index = Math.floor(Math.random() * (friendsList.length - 0));
+            this.friends.push(friendsList[index]);
+            friendsList.splice(index, 1);
           }
         }
       });

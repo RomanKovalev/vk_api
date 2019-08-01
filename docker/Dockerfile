@@ -11,7 +11,7 @@ RUN npm install
 
 EXPOSE 8080
 
-# ENV NUXT_HOST=0.0.0.0
-# ENV NUXT_PORT=3000
-
 CMD [ "yarn", "serve" ]
+
+# docker build -t vk_cont .
+# docker run -dit -p 8080:8080 vk_cont
