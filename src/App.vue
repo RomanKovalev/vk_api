@@ -2,15 +2,15 @@
   <v-app>
     <v-app-bar app>
       <v-toolbar-title class="headline text-uppercase">
-        <span>API VK EXAMPLE</span>
+        <span>API VK</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <span></span>
       <v-btn text v-if="!isLogged" @click="login()">
-        <span class="mr-2">Login</span>
+        <span class="mr-2">Авторизоваться</span>
       </v-btn>
       <v-btn text v-if="isLogged" @click="logout()">
-        <span class="mr-2">Logout</span>
+        <span class="mr-2">Выход</span>
       </v-btn>
     </v-app-bar>
 
@@ -19,10 +19,10 @@
         <v-container grid-list-md>
           <div class="text-center headline">
             
-            <b>{{ this.isLogged==true ? 'You logged in as: '+this.user : 'You should to be logged' }}</b>
+            <b>{{ this.isLogged==true ? 'Здравствуйте, '+this.user : 'Залогиньтесь, пожалуйста' }}</b>
           </div>
 
-          <v-layout wrap>
+          <v-layout justify-center wrap>
             <v-flex v-for="item in this.friends" :key="item.id" xs12 md2>
               <v-item>
                 <v-card class="flex">
@@ -113,10 +113,10 @@ export default {
         const friendsList = data.response.items;
         if (count === 0) {
           console.log("You haven't friends yet");
-        } else if (data.response.count < 7) {
+        } else if (data.response.count < 6) {
           this.friends = friendsList;
         } else {
-          for (let i = 0; i < 6; i++) {
+          for (let i = 0; i < 5; i++) {
             const index = Math.floor(Math.random() * (friendsList.length - 0));
             this.friends.push(friendsList[index]);
             friendsList.splice(index, 1);
